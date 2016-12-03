@@ -24,26 +24,28 @@ def Create_Poc(url):
    </body>
 </html>
     """.format(url)
-    f = open("Clickjacking.html","w")
+    f = open(url+".html","w")
     f.write(code)
     f.close()
 
 def main():
     try:
-        url = sys.argv[1]
+	f = open('sites.txt', 'r')
+	z = f.readlines()
+       
     except:
         print "[!] Error"
         print "[!] Usage: "+ sys.argv[0].split("\\")[-1]+" <URL>"
         sys.exit(0)
-
-    print " [>] Clickjacking Vulnerability Tester By D4Vinci"
-    print " [#] Checking "+url
-    if check(url):
-        print " [#] The website is vulnerable"
-        Create_Poc(url)
-        print " [#] Created a poc and saved to Clickjacking.html"
-    elif not check(url):
-        print " [!] The website is not vulnerable.!"
+    for x in z[0:]:
+   	 print " [>] Clickjacking Vulnerability Tester By D4Vinci"
+    	 print " \n[#] Checking "+x
+    	 if check(x):
+        	 print " [X]** The website is VULNERABLE! **"
+        	 Create_Poc(x)
+        	 print " [#] Created a poc and saved to Clickjacking.html"
+    	 elif not check(x):
+        	 print " [!] The website is not vulnerable.!"
 
 if __name__ == '__main__':
     main()
