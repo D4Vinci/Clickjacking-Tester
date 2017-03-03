@@ -1,51 +1,57 @@
-#Author:D4Vinci
-import urllib2 ,sys
+# Contributor(s): nigella (@nig)
+
+from urllib.request import urlopen
+from sys import argv, exit
+
+__author__ = 'D4Vinci'
 
 def check(url):
+    ''' check given URL is vulnerable or not '''
+
     try:
-        if "http" not in url:
-            url = "http://" + url
-        data = urllib2.urlopen(url)
+        if "http" not in url: url = "http://" + url
+
+        data = urlopen(url)
         headers = data.info()
 
-        if not "X-Frame-Options" in headers:
-            return True
-    except:
-        return False
+        if not "X-Frame-Options" in headers: return True
 
-def Create_Poc(url):
-    code = """<html>
-   <head>
-     <title>Clickjack test page</title>
-   </head>
+    except: return False
+
+
+def create_poc(url):
+    ''' create HTML page of given URL '''
+
+    code = """
+<html>
+   <head><title>Clickjack test page</title></head>
    <body>
      <p>Website is vulnerable to clickjacking!</p>
      <iframe src="{}" width="500" height="500"></iframe>
    </body>
 </html>
     """.format(url)
-    f = open(url+".html","w")
-    f.write(code)
-    f.close()
+
+    with open(url + ".html", "w") as f:
+        f.write(code)
+        f.close()
+
 
 def main():
-    try:
-	f = open('sites.txt', 'r')
-	z = f.readlines()
-       
-    except:
-        print "[!] Error"
-        print "[!] Usage: "+ sys.argv[0].split("\\")[-1]+" <URL>"
-        sys.exit(0)
-    for x in z[0:]:
-   	 print " [>] Clickjacking Vulnerability Tester By D4Vinci"
-    	 print " \n[#] Checking "+x
-    	 if check(x):
-        	 print " [X]** The website is VULNERABLE! **"
-        	 Create_Poc(x)
-        	 print " [#] Created a poc and saved to Clickjacking.html"
-    	 elif not check(x):
-        	 print " [!] The website is not vulnerable.!"
+    ''' Everything comes together '''
 
-if __name__ == '__main__':
-    main()
+    try: sites = open(argv[1], 'r').readlines()
+    except: print("[*] Usage: python(3) clickjacking_tester.py <file_name>"); exit(0)
+
+    for site in sites[0:]:
+        print("\n[*] Checking " + site)
+
+        if check(site):
+            print(" [+] Website is vulnerable!")
+            create_poc(site.split('\n')[0])
+            print(" [*] Created a poc and saved to <URL>.html")
+
+        elif not check(site): print(" [-] Website is not vulnerable!")
+        else: print('Every single thing is crashed, Python got mad, dude wtf you just did?')
+
+if __name__ == '__main__': main()
