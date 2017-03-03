@@ -45,13 +45,14 @@ def main():
 
     for site in sites[0:]:
         print("\n[*] Checking " + site)
+        status = check(site)
 
-        if check(site):
+        if status:
             print(" [+] Website is vulnerable!")
             create_poc(site.split('\n')[0])
             print(" [*] Created a poc and saved to <URL>.html")
 
-        elif not check(site): print(" [-] Website is not vulnerable!")
+        elif not status: print(" [-] Website is not vulnerable!")
         else: print('Every single thing is crashed, Python got mad, dude wtf you just did?')
 
 if __name__ == '__main__': main()
