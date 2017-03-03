@@ -3,7 +3,7 @@
 A python script designed to check if the website is vulnerable of clickjacking and creates a poc.
 
 ### Screenshot
-![alt img](https://github.com/nig/Clickjacking-Tester/blob/master/screenshot.PNG)
+![alt img](https://github.com/nig/Clickjacking-Tester/blob/master/ss.PNG)
 
 ### Usage
 
